@@ -4,38 +4,31 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            <div class="card">
-            <form class="p-4" method="post" action="{{ route('task.updateTask') }}">
+            <div class="card p-4">
+            <h3>Detail Tugas</h3>
+            <div class="card p-2">
+            <div class="d-flex gap-2">
+                <h5>{{$taskDetail->title}}</h5>
+                <p>
+                @if($taskDetail->urgency == "low")
+                    <span class="badge bg-primary">
+                        Aman
+                    </span>
+                @elseif($taskDetail->urgency == "medium")
+                    <span class="badge bg-success">
+                        Medium
+                    </span>
+                @elseif($taskDetail->urgency == "high")
+                    <span class="badge bg-warning">
+                        Urgent
+                    </span>
+                @endif
+                </p>
+            </div>
+            <p>{{$taskDetail->description}}</p>
+            </div>
+            <form class="" method="post" action="{{ route('task.updateTask') }}">
                 @csrf
-                <!-- <div class="mb-2">
-                    <label>Task Name</label>
-                    <input class="form-control" type="text" value="{{$taskDetail->title}}" placeholder="Masukan Task" name="title" aria-label="default input example">
-                </div>
-                <div class="mb-2">
-                    <label>Deskripsi</label>
-                    <input class="form-control" type="text" value="{{$taskDetail->description}}" placeholder="Masukan Deskripsi" name="description" aria-label="default input example">
-                </div>
-                <div class="mb-2">
-                    <label>Urgency</label>
-                    <input class="form-control" type="text" value="{{$taskDetail->urgency}}" placeholder="Masukan Deskripsi" name="description" aria-label="default input example">
-                </div> -->
-                <!-- <div class="mb-2">
-                    <label>Urgensi</label>
-                    <select class="form-select" name="urgency" value="{{$taskDetail->urgency}}" aria-label="Default select example">
-                        <option selected disabled>Pick Urgency Task</option>
-                        <option value="low">Low</option>
-                        <option value="medium">Medium</option>
-                        <option value="high">High</option>
-                    </select>
-                </div> -->
-                <!-- <div class="mb-2">
-                    <label>Durasi</label>
-                    <input class="form-control" type="number" placeholder="Masukan Durasi dalam satuan jam" name="duration" aria-label="default input example">
-                </div> -->
-                <!-- <div class="mb-2">
-                    <label>Batas Waktu</label>
-                    <input class="form-control" type="date" placeholder="Masukan Durasi dalam satuan jam" name="deadline" aria-label="default input example">
-                </div> -->
                 <div class="mb-2">
                     <label>Status</label>
                     <select class="form-select" name="status" aria-label="Default select example" required>
