@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-4">
             <div class="card">
             <form class="p-4" method="post" action="{{ route('task.updateTask') }}">
                 @csrf
@@ -61,7 +61,9 @@
                     <input class="form-control" type="number" value="{{$taskDetail->urgency}}" placeholder="Masukan Deskripsi" name="skor" aria-label="default input example">
                 </div> -->
                 <input type="hidden" value="{{ $taskDetail->id}}" name="id_user">
-                <button type="submit">Update Tugas</button>
+                <div class="d-flex flex-row justify-content-end mb-3 mt-4">
+                    <button type="submit" class="btn btn-sm btn-primary">Update Tugas</button>
+                </div> 
             </form>
             </div>
         </div>
