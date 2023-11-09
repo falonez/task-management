@@ -22,16 +22,17 @@
                 <th scope="col">Task From</th>
                 <th scope="col">Status</th>
                 <th scope="col">Skor</th>
+                <th scope="col">Image</th>
                 <th scope="col">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($task_assign as $task)
                     <tr class="border">
-                        <th scope="row">{{ $loop->iteration }}</th>
-                        <td>{{ $task->title }}</td>
-                        <td>{{ $task->description }}</td>
-                        <td>
+                        <th  class="align-middle" scope="row">{{ $loop->iteration }}</th>
+                        <td class="align-middle">{{ $task->title }}</td>
+                        <td class="align-middle">{{ $task->description }}</td>
+                        <td class="align-middle">
                             @if($task->urgency == "low")
                                 <span class="badge bg-primary">
                                     Task Aman
@@ -46,10 +47,10 @@
                                 </span>
                             @endif
                         </td>
-                        <td>{{ $task->duration }} hours</td>
-                        <td>{{ $task->deadline }}</td>
-                        <td>{{ $task->userCreate->name }}</td>
-                        <td>
+                        <td class="align-middle">{{ $task->duration }} hours</td>
+                        <td class="align-middle">{{ $task->deadline }}</td>
+                        <td class="align-middle">{{ $task->userCreate->name }}</td>
+                        <td class="align-middle">
                             @if($task->status == "open")
                                 <span class="badge bg-primary">
                                     Task Open
@@ -68,17 +69,18 @@
                                 </span>
                             @endif
                         </td>
-                        <td>{{ $task->skor }}</td>
+                        <td class="align-middle">{{ $task->skor }}</td>
+                        <td class="align-middle"><img width="100" src="{{ asset('storage/images/'.$task->image)}}" alt=""/></td>
                         @if($task->status == "on_progress" || $task->status == "open")
-                        <td>
+                        <td class="align-middle">
                             <a class="btn btn-sm btn-primary mb-4" href="{{ route('task.updateMytask',['id'=>$task->id,'task'=>$task->status]) }}">{{$task->status == "open" ? 'Change to On Progress' : 'Change to Review' }}</a>
-                        <td>
+                        </td>
                         @endif
+                        
                     </tr>
                 @endforeach
             </tbody>
         </table>
-
         <h1 class="fs-4">List Tugas Assign</h1>
         <table class="table">
             <thead class="border">
@@ -99,9 +101,9 @@
                 @foreach ($task_create as $task)
                     <tr class="border">
                         <th scope="row">{{ $loop->iteration }}</th>
-                        <td>{{ $task->title }}</td>
-                        <td>{{ $task->description }}</td>
-                        <td>
+                        <td  class="align-middle">{{ $task->title }}</td>
+                        <td  class="align-middle">{{ $task->description }}</td>
+                        <td  class="align-middle">
                             @if($task->urgency == "low")
                                 <span class="badge bg-primary">
                                     Task Aman
@@ -116,39 +118,39 @@
                                 </span>
                             @endif
                         </td>
-                        <td>{{ $task->duration }} hours</td>
-                        <td>{{ $task->deadline }}</td>
-                        <td>{{ $task->userAssign->name }}</td>
+                        <td  class="align-middle">{{ $task->duration }} hours</td>
+                        <td  class="align-middle">{{ $task->deadline }}</td>
+                        <td  class="align-middle">{{ $task->userAssign->name }}</td>
                         @if($task->status == "open")
-                        <td>
+                        <td  class="align-middle">
                             <span class="badge bg-primary">
                                 Task Open
                             </span>
                         </td>
                         @elseif($task->status == "solve")
-                        <td>
+                        <td  class="align-middle">
                             <span class="badge bg-success">
                                 Task Solve
                             </span>
                         </td>
                         @elseif($task->status == "on_progress")
-                        <td>
+                        <td  class="align-middle">
                             <span class="badge bg-warning">
                                 Task On Progress
                             </span>
                         </td>
                         @elseif($task->status == "review")
-                        <td>
+                        <td  class="align-middle">
                             <span class="badge bg-danger">
                                 Task Review
                             </span>
                         </td>
                         @endif
-                        <td>{{ $task->skor }}</td>
+                        <td  class="align-middle">{{ $task->skor }}</td>
                         @if($task->status == "review")
-                        <td>
+                        <td  class="align-middle">
                             <a class="btn btn-sm btn-primary mb-4" href="{{ route('task.update',['id'=>$task->id]) }}">Update Tugas</a>
-                        <td>
+                        </td>
                         @endif
                     </tr>
                 @endforeach
