@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\TaskControllerApi;
+use App\Http\Controllers\api\AuthController;
+use Spatie\Activitylog\Models\Activity;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +17,24 @@ use App\Http\Controllers\api\TaskControllerApi;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('/task', TaskControllerApi::class);
+
+Route::group([
+    
+    'middleware' => 'api',
+    'prefix' => 'auth'
+    
+], function ($router){
+    Route::post('Login', [AuthController::class, 'login']);
+    // Route::post('Register', [AuthController::class, 'register']);
+    // Route::post('Logout', [AuthController::class, 'logout']);
+    // Route::post('Refresh', [AuthController::class, 'refresh']);
+});
+
+Route::middleware('auth')->group(function(){      
+        Route::apiResource('/task', TaskControllerApi::class);
+        Route::get('/userTask/{id}', [TaskControllerApi::class, 'userTask']);
+});
