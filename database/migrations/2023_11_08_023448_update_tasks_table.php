@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::table('tasks', function (Blueprint $table) {
+        Schema::table('task', function (Blueprint $table) {
             //
             $table->enum('status', ['solve', 'on_progress', 'review',"open"])->change();
         });
