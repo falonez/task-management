@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\User;
 
 class TaskControllerApi extends Controller
 {
@@ -14,20 +15,21 @@ class TaskControllerApi extends Controller
     public function index()
     {
         //
-        try{
-            $data = Task::all();
-            return response->json([
-                status => 'success',
-                message => 'data found',
-                data => $data
+        try {
+            $data = Task::all();        
+            return response()->json([
+                'status' => 'success',
+                'message' => 'data found',
+                'data' => $data
             ], 200);
-        }catch(QueryException $e){
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'there is no data',
                 'data' => null
             ], 404);
         }
+        
     }
 
     /**
@@ -36,6 +38,48 @@ class TaskControllerApi extends Controller
     public function store(Request $request)
     {
         //
+        try{
+            // check data harus ada 
+            $request->validate([
+                'image' => 'required',
+                'title' => 'required',
+                'description' => 'required',
+                'urgency' => 'required',
+                'duration' => 'required',
+                'deadline' => 'required',
+                'user_assign_task' => 'required',
+                'user_create_task' => 'required',
+            ]);
+
+            // Generate image name
+            $date = date('ymd');
+            $newName = $date.time().'.'.$request->image->extension();
+
+            $request->image->StoreAs('public/images', $request->image->getClientOriginalName());
+            $task = new Task();
+            $task->image = $newName;
+            $task->title = $request->title;
+            $task->description = $request->description;
+            $task->urgency = $request->urgency;
+            $task->duration = $request->duration;
+            $task->deadline = $request->deadline;
+            $task->user_assign_task = $request->user_assign_task;
+            $task->user_create_task = $request->user_create_task;
+            $task->status = "open" ;
+            $task->save();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'data successfully added',
+                'data' => $task
+            ], 200);
+        }catch(Exception $e){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'there is no data',
+                'data' => null
+            ], 404);
+        }
+
     }
 
     /**
@@ -44,6 +88,22 @@ class TaskControllerApi extends Controller
     public function show(string $id)
     {
         //
+        try {
+            $data = Task::find($id);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'data found',
+                'data' => $data
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'there is no data',
+                'data' => null
+            ], 404);
+        }
+
+
     }
 
     /**
@@ -52,6 +112,27 @@ class TaskControllerApi extends Controller
     public function update(Request $request, string $id)
     {
         //
+        try{
+            $request->validate([
+                'status' => 'required',
+                'skor' => 'required',
+            ]);
+
+            $data = $request->all();
+            Task::where('id', $id)->update(["status" =>$data['status'], "skor"=>$data['skor']]);
+            $dataNew = Task::find($id);
+            return response()->json([
+                "status" => "success",
+                "message" => "data successfully updated",
+                "data" => $dataNew
+            ]);
+        } catch(Exception $e){
+            return response()->json([
+                "status" => "error",
+                "message" => "data failed to update",
+                "data" => null
+            ]);
+        }
     }
 
     /**
@@ -60,5 +141,28 @@ class TaskControllerApi extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function userTask(string $id){
+
+        try{
+            $user = User::find($id);
+            $data = Task::where('user_assign_task', $id)->get();
+            $dataNew = [
+                "user" => $user,
+                "task" => $data
+            ];
+            return response()->json([
+                "status" => "success",
+                "message" => "data successfully found",
+                "data" => $dataNew
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                "status" => "error",
+                "message" => "data failed to found",
+                "data" => null
+            ]);
+        }
     }
 }
