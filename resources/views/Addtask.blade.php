@@ -9,7 +9,7 @@
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card">
-            <form class="p-4" method="post" action="{{ route('task.create') }}">
+            <form class="p-4" method="post" action="{{ route('task.create') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-2">
                     <label>Task Name</label>
@@ -47,6 +47,9 @@
                             @endif
                         @endforeach
                     </select>
+                </div>
+                <div>
+                    <input type="file" name="image">
                 </div>
                 <input type="hidden" value="{{ Auth::user()->id}}" name="user_create_task">
                 <div class="d-flex flex-row justify-content-end mb-3 mt-4">
