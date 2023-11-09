@@ -19,9 +19,31 @@ Route::get('/', function () {
 
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/Addtask', [TaskController::class, 'index'])->name('Addtask');
-Route::post('/task/create', [TaskController::class, 'create'])->name('task.create');
-Route::get('/updateTask/{id}', [TaskController::class, 'update'])->name('task.update');
-Route::get('/updateMyTask/{id}/{task}', [TaskController::class, 'updateMyTask'])->name('task.updateMytask');
-Route::post('/task/update', [TaskController::class, 'updateTask'])->name('task.updateTask');
+// Ini cara Satu"
+// Route::get('/Addtask', [TaskController::class, 'index'])->name('Addtask');
+// Route::post('/task/create', [TaskController::class, 'create'])->name('task.create');
+// Route::get('/updateTask/{id}', [TaskController::class, 'update'])->name('task.update');
+// Route::get('/updateMyTask/{id}/{task}', [TaskController::class, 'updateMyTask'])->name('task.updateMytask');
+// Route::post('/task/update', [TaskController::class, 'updateTask'])->name('task.updateTask');
+
+// Ini cara di grouping
+// Route::controller(TaskController::class)->group(function(){
+//     Route::get('/Addtask','index')->name('Addtask');
+//     Route::post('/task/create', 'create')->name('task.create');
+//     Route::get('/updateTask/{id}', 'update')->name('task.update');
+//     Route::get('/updateMyTask/{id}/{task}', 'updateMyTask')->name('task.updateMytask');
+//     Route::post('/task/update',  'updateTask')->name('task.updateTask');
+// });
+
+// jika menggunakan middleware 
+Route::middleware('auth')->group(function(){
+    Route::controller(TaskController::class)->group(function(){
+        Route::get('/Addtask','index')->name('Addtask');
+        Route::post('/task/create', 'create')->name('task.create');
+        Route::get('/updateTask/{id}', 'update')->name('task.update');
+        Route::get('/updateMyTask/{id}/{task}', 'updateMyTask')->name('task.updateMytask');
+        Route::post('/task/update',  'updateTask')->name('task.updateTask');
+    });
+});
+
 Auth::routes();

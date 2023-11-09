@@ -26,6 +26,7 @@ class HomeController extends Controller
     {
         // mendapatkan user yang login sekarang 
         $user = auth()->user();
+        // $task_assign = Task::where('user_assign_task', $user->id)->paginate(2);
         $task_assign = Task::where('user_assign_task', $user->id)->get();
         $task_create = Task::where('user_create_task', $user->id)->get();
         $tasks = Task::all();

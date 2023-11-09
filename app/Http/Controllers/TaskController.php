@@ -3,15 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Task;
 use App\Models\User;
 
 class TaskController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
 
     public function index()
     {
@@ -21,9 +22,10 @@ class TaskController extends Controller
     }
 
     public function create(Request $request)
-    {
-        // @dd($request->title);
+    {  
+        $request->image->StoreAs('public/images', $request->image->getClientOriginalName());
         $task = new Task();
+        $task->image = $request->image->getClientOriginalName();
         $task->title = $request->title;
         $task->description = $request->description;
         $task->urgency = $request->urgency;
