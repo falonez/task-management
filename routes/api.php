@@ -37,4 +37,7 @@ Route::group([
 Route::middleware('auth')->group(function(){      
         Route::apiResource('/task', TaskControllerApi::class);
         Route::get('/userTask/{id}', [TaskControllerApi::class, 'userTask']);
+        Route::get('/users/export/', [AuthController::class, 'export'])->name('users.export');
+        Route::get('/taskku/export/', [TaskControllerApi::class, 'exportExel'])-> name('task.export');
+        Route::post('/taskku/import/', [TaskControllerApi::class, 'importExel'])-> name('task.import');
 });

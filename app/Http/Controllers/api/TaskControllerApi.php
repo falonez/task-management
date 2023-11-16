@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\User;
+use App\Exports\TaskExport;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\TaskImport;
 
 class TaskControllerApi extends Controller
 {
@@ -118,13 +121,15 @@ class TaskControllerApi extends Controller
                 'skor' => 'required',
             ]);
 
-            $data = $request->all();
-            Task::where('id', $id)->update(["status" =>$data['status'], "skor"=>$data['skor']]);
-            $dataNew = Task::find($id);
+            $data = Task::find($id);
+            $data->status=$request->status;
+            $data->skor=$request->skor;
+            $data->save();
+            
             return response()->json([
                 "status" => "success",
                 "message" => "data successfully updated",
-                "data" => $dataNew
+                "data" => $data
             ]);
         } catch(Exception $e){
             return response()->json([
@@ -141,6 +146,21 @@ class TaskControllerApi extends Controller
     public function destroy(string $id)
     {
         //
+        try{
+            $data = Task::find($id);
+            $data->delete();
+            return response()->json([
+                "status" => "success",
+                "message" => "data successfully deleted",
+                "data" => $data
+            ]);
+        }catch(Exception $e){
+            return response()->json([
+                "status" => "error",
+                "message" => "data failed to delete",
+                "data" => null
+            ]);
+        }
     }
 
     public function userTask(string $id){
@@ -162,6 +182,28 @@ class TaskControllerApi extends Controller
                 "status" => "error",
                 "message" => "data failed to found",
                 "data" => null
+            ]);
+        }
+    }
+
+    public function exportExel(){
+        return Excel::download(new TaskExport, 'task.xlsx');
+    }
+
+    public function importExel(Excel $request) 
+    {   
+        try{
+            $import = Excel::import(new TaskImport, request()->file('file'));
+            return response()->json([
+                "status" => "success",
+                "message" => "data successfully imported",
+                "data" => $import
+            ]);
+        }catch(err $e){
+            return response()->json([
+                "status" => "error",
+                "message" => "data failed to import",
+                "data" => $e
             ]);
         }
     }
